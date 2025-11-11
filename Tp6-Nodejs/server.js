@@ -20,10 +20,18 @@ app.get('/users', async (req, res) => {
 
 // GET /users/:id
 app.get('/users/:id', async (req, res) => {
-  const user = await User.findByPk(req.params.id);
-  if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
-  res.json(user);
+  try {
+    console.log("🔎 Buscando usuario con ID:", req.params.id);
+    const user = await User.findByPk(req.params.id);
+    console.log("Resultado:", user);
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json(user);
+  } catch (err) {
+    console.error("❌ Error al buscar usuario:", err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
 });
+
 
 // POST /users
 app.post('/users', async (req, res) => {
